@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %} GERER NOTES {% endblock %}
+
+
+{% block body %}
+  <div class="jumbotron p-3">
+   <div class="well text-center">
+       <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">Etudiant</a>
+   <a class="navbar-brand" href="/matiere">Matière</a>
+       <a class="navbar-brand" href="/s1note">Notes sem1</a>
+       <a class="navbar-brand" href="/s2note">Notes sem2</a>
+       <a class="navbar-brand" href="/moyenne">Moyenne</a>
+       <a class="navbar-brand" href="/specialite">Spécialité</a>
+
+      <form class="d-flex">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form>
+
+  </div>
+</nav>
+
+      </div>
+    </div>
+{% endblock %}

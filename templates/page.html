@@ -1,0 +1,285 @@
+{% extends 'base.html' %}
+{% include 'header.html' %}
+
+
+{% block title %} Home {% endblock %}
+
+
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class="col md-12">
+
+            <div class="jumbotron p-3">
+
+                <h2>Gestion <b>Notes </b>  <button type="button"  class="btn btn-success float-right"
+                data-toggle="modal" data-target="#mymodal">Ajouter une Note </button> </h2>
+
+
+                {% with messages = get_flashed_messages() %}
+
+                {% if messages %}
+
+                {% for message in messages %}
+
+                <div class="alert alert-success alert-dismissable" role="alert">
+
+                    <button type="button" class="close" data-dismiss="alert" aria-label="close">
+
+                        <span aria-hidden="true">x</span>
+
+                    </button>
+
+
+                {{message}}
+
+
+                </div>
+
+
+                {% endfor %}
+
+                {% endif %}
+                {% endwith %}
+
+
+                <table class="table table-hover table-dark">
+
+                    <tr>
+
+                         <th>Id</th>
+                        <th>NoteDs</th>
+                        <th>NoteExam</th>
+                        <th>NoteTp</th>
+                        <th>Etudiant</th>
+                        <th>Matiere</th>
+                        <th>Moyenne</th>
+                        <th>Action</th>
+
+
+                    </tr>
+
+                    {% for row in s2notes %}
+
+                     <tr>
+                       <td>{{row.id}}</td>
+                        <td>{{row.NoteDs}}</td>
+                        <td>{{row.NoteExam}}</td>
+                        <td>{{row.NoteTp}}</td>
+                         {% for data in etudiants %}
+                         {% if row.data == data.id %}
+                        <td>{{data.name}}</td>
+                         {% endif %}
+                         {% endfor %}
+                         {% for mat in matieres %}
+                         {% if row.matiere == mat.id %}
+                         <td>{{mat.libelle}}</td>
+                         {% endif %}
+                         {% endfor %}
+                         <td>
+                             {{row.NoteDs *0.3+row.NoteExam*0.5+row.NoteTp*0.2}}
+
+                         </td>
+                        <td>
+                            <a href="/updatenotes2" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modaledit{{row.id}}">Modifier</a>
+                           <a href="/deletenotes2/{{row.id}}" class="btn btn-danger btn-xs" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ?')">Supprimer</a>
+
+                        </td>
+
+                    </tr>
+
+
+                     <!-- Modal Modifier Note -->
+
+<div id="modaledit{{row.id}}" class="modal fade" role="dialog">
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <div class="modal-header">
+
+            <h4 class="modal-title">Modifier Note</h4>
+         </div>
+         <div class="modal-body">
+
+            <form action="{{url_for('updatenotes2')}}" method="POST">
+
+
+                <div class="form-group">
+
+                  <label>NoteDs:</label>
+                  <input type="hidden"  name="id" value="{{row.id}}">
+                  <input type="Integer" class="form-control" name="NoteDs" value="{{row.NoteDs}}">
+
+               </div>
+
+
+                <div class="form-group">
+
+
+                  <label>NoteExam:</label>
+                  <input type="Integer" class="form-control" name="NoteExam" value="{{row.NoteExam}}">
+
+               </div>
+
+
+                 <div class="form-group">
+
+
+                  <label>NoteTp:</label>
+                  <input type="Integer" class="form-control" name="NoteTp" value="{{row.NoteTp}}">
+
+
+               </div>
+
+
+                 <div class="form-group">
+
+
+
+
+               <div class="form-group">
+
+
+                  <button class="btn btn-primary" type="submit">Modifier Note </button>
+
+
+               </div>
+                 </div>
+
+            </form>
+
+
+         </div>
+
+
+         <div class="modal-footer">
+
+
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+
+
+         </div>
+
+
+      </div>
+
+
+   </div>
+
+
+</div>
+
+
+
+ {% endfor %}
+
+
+
+</table>
+            </div>
+            <!-- Modal Ajouter Note -->
+
+
+<div id="mymodal" class="modal fade" role="dialog">
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <div class="modal-header">
+
+            <h4 class="modal-title">Ajouter Note </h4>
+         </div>
+         <div class="modal-body">
+
+            <form action="{{url_for('insertnotes2')}}" method="POST">
+
+
+               <div class="form-group">
+
+                  <label>NoteDs:</label>
+                  <input type="Integer" class="form-control" name="NoteDs" required="1">
+
+
+               </div>
+
+
+                   <div class="form-group">
+
+
+                  <label>NoteExam:</label>
+                  <input type="Integer" class="form-control" name="NoteExam" required="1">
+
+
+               </div>
+
+
+              <div class="form-group">
+
+
+                  <label>NoteTp:</label>
+                  <input type="Integer" class="form-control" name="NoteTp" required="1">
+
+
+               </div>
+       <div class="form-group">
+               <label>etudiant:</label>
+<select name="data" class="form-select form-select-sm"
+                        aria-label=".form-select-sm example">
+                        <option selected>Selectionnez un étudiant</option>
+               {% for data in etudiants %}
+               <option name="data" value="{{data.id}} ">
+                        {{data.id}} {{data.name}}</option>
+                       {% endfor %}
+                      </select>
+
+
+               </div>
+                <div class="form-group">
+                <label>matiere:</label>
+
+<select name="matiere" class="form-select form-select-sm"
+                        aria-label=".form-select-sm example">
+                        <option selected>Selectionnez une matière</option>
+               {% for matiere in matieres %}
+               <option name="matiere" value="{{matiere.id}} ">
+                        {{matiere.libelle}}</option>
+                       {% endfor %}
+                      </select>
+
+               </div>
+
+               <div class="form-group">
+
+
+                  <button class="btn btn-primary" type="submit">Ajouter Note </button>
+
+
+               </div>
+
+
+            </form>
+
+
+         </div>
+
+
+         <div class="modal-footer">
+
+
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+
+
+         </div>
+
+
+      </div>
+
+
+   </div>
+
+
+</div>
+
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

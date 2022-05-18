@@ -1,0 +1,242 @@
+{% extends 'base.html' %}
+{% include 'header.html' %}
+
+
+{% block title %} Home {% endblock %}
+
+
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class="col md-12">
+
+            <div class="jumbotron p-3">
+
+                <h2>Gestion <b>Matieres </b>  <button type="button"  class="btn btn-success float-right"
+                data-toggle="modal" data-target="#mymodal">Ajouter une matiere </button> </h2>
+
+
+                {% with messages = get_flashed_messages() %}
+
+                {% if messages %}
+
+                {% for message in messages %}
+
+                <div class="alert alert-success alert-dismissable" role="alert">
+
+                    <button type="button" class="close" data-dismiss="alert" aria-label="close">
+
+                        <span aria-hidden="true">x</span>
+
+                    </button>
+
+
+                {{message}}
+
+
+                </div>
+
+
+                {% endfor %}
+
+                {% endif %}
+                {% endwith %}
+
+
+                <table class="table table-hover table-dark">
+
+                    <tr>
+
+                         <th>Id</th>
+                        <th>CodeMat</th>
+                        <th>Libelle</th>
+                        <th>Coefficient</th>
+                        <th>Action</th>
+
+                    </tr>
+
+                    {% for row in matieres %}
+
+                     <tr>
+                       <td>{{row.id}}</td>
+                        <td>{{row.codemat}}</td>
+                        <td>{{row.libelle}}</td>
+                        <td>{{row.coefficient}}</td>
+
+                        <td>
+                            <a href="/updatematiere/{{row.id}}" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modaledit{{row.id}}">Modifier</a>
+                            <a href="/deletematiere/{{row.id}}" class="btn btn-danger btn-xs" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ?')">Supprimer</a>
+
+
+                        </td>
+
+                    </tr>
+
+
+                     <!-- Modal Modifier Matiere -->
+
+<div id="modaledit{{row.id}}" class="modal fade" role="dialog">
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <div class="modal-header">
+
+            <h4 class="modal-title">Modifier Matiere</h4>
+         </div>
+         <div class="modal-body">
+
+            <form action="{{url_for('updatematiere')}}" method="POST">
+
+
+                <div class="form-group">
+
+                  <label>CodeMat:</label>
+                  <input type="hidden"  name="id" value="{{row.id}}">
+                  <input type="Integer" class="form-control" name="codemat" value="{{row.codemat}}">
+
+               </div>
+
+
+                <div class="form-group">
+
+
+                  <label>Libelle:</label>
+                  <input type="text" class="form-control" name="libelle" value="{{row.libelle}}">
+
+               </div>
+
+
+                 <div class="form-group">
+
+
+                  <label>Coefficient:</label>
+                  <input type="Integer" class="form-control" name="coefficient" value="{{row.coefficient}}">
+
+
+               </div>
+
+
+
+               <div class="form-group">
+
+
+                  <button class="btn btn-primary" type="submit">Modifier Matiere </button>
+
+
+               </div>
+
+
+            </form>
+
+
+         </div>
+
+
+         <div class="modal-footer">
+
+
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+
+
+         </div>
+
+
+      </div>
+
+
+   </div>
+
+
+</div>
+
+
+
+ {% endfor %}
+
+
+
+</table>
+            </div>
+            <!-- Modal Ajouter Matiere -->
+
+
+<div id="mymodal" class="modal fade" role="dialog">
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <div class="modal-header">
+
+            <h4 class="modal-title">Ajouter Matiere </h4>
+         </div>
+         <div class="modal-body">
+
+            <form action="{{url_for('insertmatiere')}}" method="POST">
+
+
+
+               <div class="form-group">
+
+                  <label>CodeMat:</label>
+                  <input type="Integer" class="form-control" name="codemat" required="1">
+
+
+               </div>
+
+
+                   <div class="form-group">
+
+
+                  <label>Libelle:</label>
+                  <input type="text" class="form-control" name="libelle" required="1">
+
+
+               </div>
+
+
+              <div class="form-group">
+
+
+                  <label>Coefficient:</label>
+                  <input type="Integer" class="form-control" name="coefficient" required="1">
+
+
+               </div>
+
+
+
+               <div class="form-group">
+
+
+                  <button class="btn btn-primary" type="submit">Ajouter Matiere </button>
+
+
+               </div>
+
+
+            </form>
+
+
+         </div>
+
+
+         <div class="modal-footer">
+
+
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+
+
+         </div>
+
+
+      </div>
+
+
+   </div>
+
+
+</div>
+
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}
